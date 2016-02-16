@@ -8,6 +8,7 @@ function threeBooleans(num) {
   return [odd, prime, divisionThree];
 }
 
+
 function isPrime(num) {
   for (var i = 2; i < num; i++) {
     if (num % i == 0) {
@@ -21,3 +22,5 @@ function isPrime(num) {
 console.log(threeBooleans(7));
 console.log(threeBooleans(8));
 console.log(threeBooleans(9));
+//console.log(threeBooleans(0));
+//console.log(threeBooleans(1));

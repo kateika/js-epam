@@ -3,8 +3,8 @@
 function sum(n1, n2) {
   if (n1 == n2) return n1;
 
-  num1 = Math.min(n1, n2);
-  num2 = Math.max(n1, n2);
+  var num1 = Math.min(n1, n2);
+  var num2 = Math.max(n1, n2);
   
   var sum = 0;
   

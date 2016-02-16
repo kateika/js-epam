@@ -4,15 +4,13 @@
 //findNextSquare(114) --> -1
 
 function findNextSquare(num) {
-  var nextSquare, nextNum;
+  var nextNum;
   var currentNum = Math.sqrt(num);
   if (Math.floor(currentNum) == currentNum) {
     nextNum = currentNum + 1;
-    return nextSquare = Math.pow(nextNum, 2);
-  } else {
-    return -1;
+    return nextNum * nextNum;
   }
-
+  return -1;
 }
 
 console.log(findNextSquare(114));
