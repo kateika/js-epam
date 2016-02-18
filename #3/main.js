@@ -189,18 +189,12 @@ function changeParagraphText() {
 //Изменение порядка элементов на обратный у списка
 function reverseList() {
   var ul = body.getElementsByTagName("ul")[0];
-  
-  //Создаем новый массив, в который добавляем элементы в обратном порядке
-  var reverseLi = [];
-  for (var i = ul.children.length-1; i >= 0; i--) {
-    reverseLi.push(ul.children[i]);
-  }
 
-  //Вставляет элементы в обратном порядке
-  for (var i = 0; i < reverseLi.length; i++) {
-    ul.appendChild(reverseLi[i])
+  //Вставляем последний элемент перед текущим (который все время единица)
+  for(var i = 0; i < ul.children.length-1; i++) {
+    ul.insertBefore(ul.lastChild, ul.children[i]);
+    console.log(ul.lastChild, ul.children[i]);
   }
-  
 }
 
 //--------------6 задание------------//
