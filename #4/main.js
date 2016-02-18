@@ -103,7 +103,7 @@ function createLine(section) {
 }
 
 function deleteLine(line) { 
-  var section = findPreviousSection(line);
+  var section = findCurrentSection(line);
   tbody.removeChild(line);
   count(section);
 }
@@ -140,7 +140,7 @@ function findNextSection(line) {
   }
 }
 
-function findPreviousSection(previousLine) {
+function findCurrentSection(previousLine) {
   var previousLine = previousLine.previousElementSibling;
   while(previousLine) {
     //Если нашлась такая строчка, то перестань искать. В previousLine на данном этапе у нас как раз нужная строка с "title"
