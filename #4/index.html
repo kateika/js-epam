@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>Главная</title>
+  <style>
+    #table {
+      border-collapse: collapse;
+    }
+    thead {
+      text-align: center;
+    }
+    td {
+      width: 170px;
+      height: 25px;
+      border: 1px solid black;
+      padding-left: 10px;
+    }
+    .action {
+      float: right;
+      text-decoration: none;
+      margin-right: 25px;
+    }
+    .action:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+
+<body>
+  <table id="table">
+    <thead id="thead">
+      <tr>
+        <td>№</td>
+        <td>Заголовок 2</td>
+        <td>Заголовок 3</td>
+        <td>Заголовок 4</td>
+        <td>Заголовок 5</td>
+      </tr>
+    </thead>
+    <tbody id="tbody">
+      <tr class="title">
+        <td colspan="5">Отчет №1<a href="#" class="action add">Добавить строку + </a></td>
+      </tr>
+      <tr class="title">
+        <td colspan="5">Отчет №2<a href="#" class="action add">Добавить строку + </a></td>
+      </tr>
+      <tr class="title">
+        <td colspan="5">Отчет №3<a href="#" class="action add">Добавить строку + </a></td>
+      </tr>
+    </tbody>
+  </table>
+  <script src="main.js"></script>
+</body>
+
+</html>
