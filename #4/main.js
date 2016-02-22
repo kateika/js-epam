@@ -180,14 +180,15 @@ function handleHover(event) {
     if(hoveredTD) {
       hoveredFirstTD = hoveredTD.closest("tr").firstElementChild;
       index = indexOf(hoveredTD);
-      tdHead[index].style.backgroundColor = "transparent";
-      hoveredFirstTD.style.backgroundColor = "transparent";
-      hoveredTD.style.backgroundColor = "transparent";
+      tdHead[index].classList.remove("hover");
+      hoveredFirstTD.classList.remove("hover");
+      hoveredTD.classList.remove("hover");
     }
     
     //Здесь запомнено пред-предыдущее состояние (до оранжевого). Очищаем бэкграунд и состояния, так как при наведении на первую,последнюю и ячейку с заголовком в таблице не должно быть никаких цветов
     if(prevHoveredTD) {
-      prevHoveredTD.style.backgroundColor = "transparent";
+      prevHoveredTD.classList.remove("prev-hover");
+      prevHoveredTD.classList.remove("hover");
       prevHoveredTD = hoveredTD = null;  
     }
   }
@@ -195,16 +196,19 @@ function handleHover(event) {
   
   //Здесь запомнено пред-предыдущее состояние (до оранжевого).
   if(prevHoveredTD) {
-    prevHoveredTD.style.backgroundColor = "transparent";
+    prevHoveredTD.classList.remove("hover");
+    prevHoveredTD.classList.remove("prev-hover");
   }
   
   //Здесь запомнено предыдущее состояние (до оранжевого).
   if(hoveredTD) {
     hoveredFirstTD = hoveredTD.closest("tr").firstElementChild;
     index = indexOf(hoveredTD);
-    tdHead[index].style.backgroundColor = "transparent";
-    hoveredFirstTD.style.backgroundColor = "transparent";
-    hoveredTD.style.backgroundColor = "orange";
+    tdHead[index].classList.remove("hover");
+    hoveredFirstTD.classList.remove("hover");
+    tdHead[index].classList.remove("prev-hover");
+    hoveredFirstTD.classList.remove("prev-hover");
+    hoveredTD.classList.add("prev-hover");
     //А тут запомнится как бы пред-предыдушее состояние
     prevHoveredTD = hoveredTD;
   }
@@ -213,9 +217,9 @@ function handleHover(event) {
   //Отсюда начинается запоминание состояний
   if(target != firstTD && target != lastTD) {
     var index = indexOf(target);
-    tdHead[index].style.backgroundColor = "green";
-    firstTD.style.backgroundColor = "green";
-    target.style.backgroundColor = "green";
+    tdHead[index].classList.add("hover");
+    firstTD.classList.add("hover");
+    target.classList.add("hover");
     //В этом моменте мы запоминаем ячейку, на которую навели, при следующем запуске
     //нам понадобится это как бы предыдущее состояние
     hoveredTD = target;
@@ -249,7 +253,7 @@ function stickLine() {
       clone.className = "clone";
       clone.firstElementChild.style.borderBottom = "none";
       tbody.insertBefore(clone, section1);
-      
+      //Сбрасываем инлайновые стили
       section1.style.top = null;
       section1.classList.add("sticky-header");
       firstChildOfsection1.style.width = offsetWidth + "px";
