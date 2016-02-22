@@ -242,12 +242,10 @@ function stickLine() {
       clone.firstElementChild.style.borderBottom = "none";
       tbody.insertBefore(clone, title1);
       
-      title1.style.position = "fixed";
-      title1.style.top = 0;
-      firstChildOftitle1.style.boxSizing = "border-box";
+      title1.style.top = null;
+      title1.classList.add("sticky-header");
       firstChildOftitle1.style.width = offsetWidth + "px";
       firstChildOftitle1.style.height = offsetHeight + "px";
-      firstChildOftitle1.style.backgroundColor = "white";
     }
   }
   
@@ -256,18 +254,20 @@ function stickLine() {
       // unstick title
       tbody.removeChild(clone);
       clone = null;
-      title1.style.position = "static";
+      title1.classList.remove("sticky-header");
+      title1.classList.remove("sticky-transition");
     }
-    if(offsetTop(title1) > body.scrollTop && title1.style.position == "absolute") {
-      title1.style.position = "fixed";
-      title1.style.top = 0;
+    if(offsetTop(title1) > body.scrollTop && title1.classList.contains("sticky-transition")) {
+      title1.style.top = null;
+      title1.classList.add("sticky-header");
+      title1.classList.remove("sticky-transition");
     }
   }
   
   // glue two titles together
   //+1/-1-это чтобы не удалять/добавлять нижние и верхние бордеры каждый раз
   if(offsetTop(title2) <= body.scrollTop + title1.offsetHeight - 1) {
-    title1.style.position = "absolute";
+    title1.classList.add("sticky-transition");
     title1.style.top = (pointForAbsolute - title1.offsetHeight + 1) + "px";
   }
   
@@ -279,12 +279,10 @@ function stickLine() {
       clone2.firstElementChild.style.borderBottom = "none";
       tbody.insertBefore(clone2, title2);
       
-      title2.style.position = "fixed";
-      title2.style.top = 0;
-      firstChildOftitle2.style.boxSizing = "border-box";
+      title2.style.top = null;
+      title2.classList.add("sticky-header");
       firstChildOftitle2.style.width = offsetWidth + "px";
       firstChildOftitle2.style.height = offsetHeight + "px";
-      firstChildOftitle2.style.backgroundColor = "white";
     }
   }
   
@@ -292,17 +290,19 @@ function stickLine() {
   if(offsetTop(clone2) > body.scrollTop) {
     tbody.removeChild(clone2);
     clone2 = null;
-    title2.style.position = "static";
+    title2.classList.remove("sticky-header");
+    title2.classList.remove("sticky-transition");
   }
-  if(offsetTop(title2) > body.scrollTop && title2.style.position == "absolute") {
-    title2.style.position = "fixed";
-    title2.style.top = 0;
+  if(offsetTop(title2) > body.scrollTop && title2.classList.contains("sticky-transition")) {
+    title2.style.top = null;
+    title2.classList.add("sticky-header");
+    title2.classList.remove("sticky-transition");
   }
  }
   
     // glue two titles together (2-3)
   if(offsetTop(title3) <= body.scrollTop + title2.offsetHeight - 1) {
-    title2.style.position = "absolute";
+    title2.classList.add("sticky-transition");
     title2.style.top = (offsetTop(title3) - title2.offsetHeight + 1) + "px";
   }
   
@@ -314,12 +314,10 @@ function stickLine() {
       clone3.firstElementChild.style.borderBottom = "none";
       tbody.insertBefore(clone3, title3);
       
-      title3.style.position = "fixed";
-      title3.style.top = 0;
-      firstChildOftitle3.style.boxSizing = "border-box";
+      title3.style.top = null;
+      title3.classList.add("sticky-header");
       firstChildOftitle3.style.width = offsetWidth + "px";
       firstChildOftitle3.style.height = offsetHeight + "px";
-      firstChildOftitle3.style.backgroundColor = "white";
     }
   }
   
@@ -327,7 +325,8 @@ function stickLine() {
   if(offsetTop(clone3) > body.scrollTop) {
     tbody.removeChild(clone3);
     clone3 = null;
-    title3.style.position = "static";
+    title3.classList.remove("sticky-header");
+    title3.classList.remove("sticky-transition");
   }
  }
 }
