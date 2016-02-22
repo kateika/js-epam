@@ -145,8 +145,8 @@ function findNextSection(line) {
   }
 }
 
-function findCurrentSection(previousLine) {
-  var previousLine = previousLine.previousElementSibling;
+function findCurrentSection(line) {
+  var previousLine = line.previousElementSibling;
   while(previousLine) {
     //Если нашлась такая строчка, то перестань искать. В previousLine на данном этапе у нас как раз нужная строка с "title"
     if(isSection(previousLine)) {
@@ -159,7 +159,7 @@ function findCurrentSection(previousLine) {
 
 /***********************Handle Hover****************/
 //Для запоминания состояний ячеек
-var hoveredTD, prevHoveredTD;
+var hoveredTD, prevHoveredTD, hoveredFirstTD;
 
 function handleHover(event) {
   var target = event.target;
@@ -178,7 +178,7 @@ function handleHover(event) {
     //Здесь в hoveredTD запомнена предыдущая ячейка,на которую навели и мы ищем ее\
     //заголовки сверху и сбоку и очищаем их
     if(hoveredTD) {
-      var hoveredFirstTD = hoveredTD.closest("tr").firstElementChild;
+      hoveredFirstTD = hoveredTD.closest("tr").firstElementChild;
       index = indexOf(hoveredTD);
       tdHead[index].style.backgroundColor = "transparent";
       hoveredFirstTD.style.backgroundColor = "transparent";
@@ -200,7 +200,7 @@ function handleHover(event) {
   
   //Здесь запомнено предыдущее состояние (до оранжевого).
   if(hoveredTD) {
-    var hoveredFirstTD = hoveredTD.closest("tr").firstElementChild;
+    hoveredFirstTD = hoveredTD.closest("tr").firstElementChild;
     index = indexOf(hoveredTD);
     tdHead[index].style.backgroundColor = "transparent";
     hoveredFirstTD.style.backgroundColor = "transparent";
