@@ -13,7 +13,7 @@ var selectedTD;
 
 //Строим начальный вариант таблицы
 for(var i = 0; i < titles.length; i++) {
-  for(var j = 0; j < 4; j++) {
+  for(var j = 0; j < 16; j++) {
     createLine(titles[i]);
   }
 }
@@ -213,3 +213,132 @@ function handleHover(event) {
     hoveredTD = target;
   }
 }
+
+
+/***********************Sticky Header************/
+document.addEventListener("scroll", stickLine);
+var clone = null;
+var clone2 = null;
+var clone3 = null;
+var title1 = tbody.getElementsByClassName("title")[0];
+var title2 = tbody.getElementsByClassName("title")[1];
+var title3 = tbody.getElementsByClassName("title")[2];
+var body = document.body;
+
+function stickLine() {
+  var firstChildOftitle1 = title1.firstElementChild;
+  var firstChildOftitle2 = title2.firstElementChild;
+  var firstChildOftitle3 = title3.firstElementChild;
+  var offsetWidth = firstChildOftitle1.offsetWidth;
+  var offsetHeight = firstChildOftitle1.offsetHeight;
+  var pointForAbsolute = offsetTop(title2);
+  
+  
+  if(offsetTop(title1) <= body.scrollTop) {
+    if(clone === null) {
+      // stick title
+      clone = title1.cloneNode(true);
+      clone.className = "clone";
+      clone.firstElementChild.style.borderBottom = "none";
+      tbody.insertBefore(clone, title1);
+      
+      title1.style.position = "fixed";
+      title1.style.top = 0;
+      firstChildOftitle1.style.boxSizing = "border-box";
+      firstChildOftitle1.style.width = offsetWidth + "px";
+      firstChildOftitle1.style.height = offsetHeight + "px";
+      firstChildOftitle1.style.backgroundColor = "white";
+    }
+  }
+  
+  if(clone) {
+    if(offsetTop(clone) > body.scrollTop) {
+      // unstick title
+      tbody.removeChild(clone);
+      clone = null;
+      title1.style.position = "static";
+    }
+    if(offsetTop(title1) > body.scrollTop && title1.style.position == "absolute") {
+      title1.style.position = "fixed";
+      title1.style.top = 0;
+    }
+  }
+  
+  // glue two titles together
+  //+1/-1-это чтобы не удалять/добавлять нижние и верхние бордеры каждый раз
+  if(offsetTop(title2) <= body.scrollTop + title1.offsetHeight - 1) {
+    title1.style.position = "absolute";
+    title1.style.top = (pointForAbsolute - title1.offsetHeight + 1) + "px";
+  }
+  
+  // stick title2
+  if (pointForAbsolute <= body.scrollTop) {
+    if(clone2 === null) {
+      clone2 = title2.cloneNode(true);
+      clone2.className = "clone";
+      clone2.firstElementChild.style.borderBottom = "none";
+      tbody.insertBefore(clone2, title2);
+      
+      title2.style.position = "fixed";
+      title2.style.top = 0;
+      firstChildOftitle2.style.boxSizing = "border-box";
+      firstChildOftitle2.style.width = offsetWidth + "px";
+      firstChildOftitle2.style.height = offsetHeight + "px";
+      firstChildOftitle2.style.backgroundColor = "white";
+    }
+  }
+  
+ if (clone2) {
+  if(offsetTop(clone2) > body.scrollTop) {
+    tbody.removeChild(clone2);
+    clone2 = null;
+    title2.style.position = "static";
+  }
+  if(offsetTop(title2) > body.scrollTop && title2.style.position == "absolute") {
+    title2.style.position = "fixed";
+    title2.style.top = 0;
+  }
+ }
+  
+    // glue two titles together (2-3)
+  if(offsetTop(title3) <= body.scrollTop + title2.offsetHeight - 1) {
+    title2.style.position = "absolute";
+    title2.style.top = (offsetTop(title3) - title2.offsetHeight + 1) + "px";
+  }
+  
+  // stick title2
+  if (offsetTop(title3) <= body.scrollTop) {
+    if(clone3 === null) {
+      clone3 = title3.cloneNode(true);
+      clone3.className = "clone";
+      clone3.firstElementChild.style.borderBottom = "none";
+      tbody.insertBefore(clone3, title3);
+      
+      title3.style.position = "fixed";
+      title3.style.top = 0;
+      firstChildOftitle3.style.boxSizing = "border-box";
+      firstChildOftitle3.style.width = offsetWidth + "px";
+      firstChildOftitle3.style.height = offsetHeight + "px";
+      firstChildOftitle3.style.backgroundColor = "white";
+    }
+  }
+  
+ if (clone3) {
+  if(offsetTop(clone3) > body.scrollTop) {
+    tbody.removeChild(clone3);
+    clone3 = null;
+    title3.style.position = "static";
+  }
+ }
+}
+
+//Функция возавращает offsetTop от самого боди (с учетом изменения контекста позиционирования)
+function offsetTop(node) {
+  var top = node.offsetTop;
+  while(node.offsetParent) {
+    node = node.offsetParent;
+    top += node.offsetTop;
+  }
+  return top;
+}
+
