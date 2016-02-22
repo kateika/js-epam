@@ -1,6 +1,6 @@
 var thead = document.getElementById("thead");
 var tbody = document.getElementById("tbody");
-var titles = document.getElementsByClassName("title");
+var sections = document.getElementsByClassName("section");
 var tdHead = thead.getElementsByTagName("td");
 
 
@@ -12,9 +12,9 @@ tbody.addEventListener("mouseover", handleHover);
 var selectedTD;
 
 //Строим начальный вариант таблицы
-for(var i = 0; i < titles.length; i++) {
+for(var i = 0; i < sections.length; i++) {
   for(var j = 0; j < 16; j++) {
-    createLine(titles[i]);
+    createLine(sections[i]);
   }
 }
 
@@ -78,7 +78,7 @@ function indexOf(target) {
 
 function createLine(section) {
   var line = document.createElement("tr");
-  var td, nextLine;
+  var td, nextSection;
   //Мы знаем, что ячеек 5
   var tdQuantity = 5;
   for(var i = 0; i < tdQuantity; i++) {
@@ -93,11 +93,11 @@ function createLine(section) {
     line.appendChild(td);
   }
   
-  nextLine = findNextSection(section);
+  nextSection = findNextSection(section);
   
-  //Нужно обработать специальный кейс, когда строчка добавляется в последнюю секцию (без проверки функция работает нестабильно, так как nextLine = null)
-  if(nextLine) {
-    tbody.insertBefore(line, nextLine);
+  //Нужно обработать специальный кейс, когда строчка добавляется в последнюю секцию (без проверки функция работает нестабильно, так как nextSection = null)
+  if(nextSection) {
+    tbody.insertBefore(line, nextSection);
   } else {
     //Поэтому вместо вставки ДО следующей секции, просто вставляем линию в конец таблицы
     tbody.appendChild(line);
@@ -114,7 +114,7 @@ function deleteLine(line) {
 }
 
 function isSection(line) {
-  return line.classList.contains("title");
+  return line.classList.contains("section");
 }
 
 function count(section) {
@@ -133,12 +133,12 @@ function count(section) {
 }
 
 function findNextSection(line) {
-  //Начинаем искать следующую строку с классом "title",проходя через всех соседей на пути
+  //Начинаем искать следующую секцию ,проходя через всех соседей на пути
   var nextLine = line.nextElementSibling;
   while(nextLine) {
     //Если нашлась такая строчка, то перестань искать.
     if(isSection(nextLine)) {
-      //возвращаем nextline - на данном этапе тут как раз нужная строка с "title"
+      //возвращаем nextline - на данном этапе тут как раз искомая секция
       return nextLine;
     }
     nextLine = nextLine.nextElementSibling;
@@ -148,7 +148,7 @@ function findNextSection(line) {
 function findCurrentSection(line) {
   var previousLine = line.previousElementSibling;
   while(previousLine) {
-    //Если нашлась такая строчка, то перестань искать. В previousLine на данном этапе у нас как раз нужная строка с "title"
+    //Если нашлась такая строчка, то перестань искать. В previousLine на данном этапе у нас как раз нужная строка с "section"
     if(isSection(previousLine)) {
       return previousLine;
     }
@@ -174,7 +174,7 @@ function handleHover(event) {
   var index;
   
   //Очищаю все, если ховер попал на первую,последнюю ячейку или ячейку с Отчет№
-  if(line.classList.contains("title") || target == lastTD || target == firstTD) {
+  if(isSection(line) || target == lastTD || target == firstTD) {
     //Здесь в hoveredTD запомнена предыдущая ячейка,на которую навели и мы ищем ее\
     //заголовки сверху и сбоку и очищаем их
     if(hoveredTD) {
@@ -228,32 +228,32 @@ document.addEventListener("scroll", stickLine);
 var clone = null;
 var clone2 = null;
 var clone3 = null;
-var title1 = tbody.getElementsByClassName("title")[0];
-var title2 = tbody.getElementsByClassName("title")[1];
-var title3 = tbody.getElementsByClassName("title")[2];
+var section1 = tbody.getElementsByClassName("section")[0];
+var section2 = tbody.getElementsByClassName("section")[1];
+var section3 = tbody.getElementsByClassName("section")[2];
 var body = document.body;
 
 function stickLine() {
-  var firstChildOftitle1 = title1.firstElementChild;
-  var firstChildOftitle2 = title2.firstElementChild;
-  var firstChildOftitle3 = title3.firstElementChild;
-  var offsetWidth = firstChildOftitle1.offsetWidth;
-  var offsetHeight = firstChildOftitle1.offsetHeight;
-  var pointForAbsolute = offsetTop(title2);
+  var firstChildOfsection1 = section1.firstElementChild;
+  var firstChildOfsection2 = section2.firstElementChild;
+  var firstChildOfsection3 = section3.firstElementChild;
+  var offsetWidth = firstChildOfsection1.offsetWidth;
+  var offsetHeight = firstChildOfsection1.offsetHeight;
+  var pointForAbsolute = offsetTop(section2);
   
   
-  if(offsetTop(title1) <= body.scrollTop) {
+  if(offsetTop(section1) <= body.scrollTop) {
     if(clone === null) {
       // stick title
-      clone = title1.cloneNode(true);
+      clone = section1.cloneNode(true);
       clone.className = "clone";
       clone.firstElementChild.style.borderBottom = "none";
-      tbody.insertBefore(clone, title1);
+      tbody.insertBefore(clone, section1);
       
-      title1.style.top = null;
-      title1.classList.add("sticky-header");
-      firstChildOftitle1.style.width = offsetWidth + "px";
-      firstChildOftitle1.style.height = offsetHeight + "px";
+      section1.style.top = null;
+      section1.classList.add("sticky-header");
+      firstChildOfsection1.style.width = offsetWidth + "px";
+      firstChildOfsection1.style.height = offsetHeight + "px";
     }
   }
   
@@ -262,35 +262,35 @@ function stickLine() {
       // unstick title
       tbody.removeChild(clone);
       clone = null;
-      title1.classList.remove("sticky-header");
-      title1.classList.remove("sticky-transition");
+      section1.classList.remove("sticky-header");
+      section1.classList.remove("sticky-transition");
     }
-    if(offsetTop(title1) > body.scrollTop && title1.classList.contains("sticky-transition")) {
-      title1.style.top = null;
-      title1.classList.add("sticky-header");
-      title1.classList.remove("sticky-transition");
+    if(offsetTop(section1) > body.scrollTop && section1.classList.contains("sticky-transition")) {
+      section1.style.top = null;
+      section1.classList.add("sticky-header");
+      section1.classList.remove("sticky-transition");
     }
   }
   
-  // glue two titles together
+  // glue two sections together
   //+1/-1-это чтобы не удалять/добавлять нижние и верхние бордеры каждый раз
-  if(offsetTop(title2) <= body.scrollTop + title1.offsetHeight - 1) {
-    title1.classList.add("sticky-transition");
-    title1.style.top = (pointForAbsolute - title1.offsetHeight + 1) + "px";
+  if(offsetTop(section2) <= body.scrollTop + section1.offsetHeight - 1) {
+    section1.classList.add("sticky-transition");
+    section1.style.top = (pointForAbsolute - section1.offsetHeight + 1) + "px";
   }
   
-  // stick title2
+  // stick section2
   if (pointForAbsolute <= body.scrollTop) {
     if(clone2 === null) {
-      clone2 = title2.cloneNode(true);
+      clone2 = section2.cloneNode(true);
       clone2.className = "clone";
       clone2.firstElementChild.style.borderBottom = "none";
-      tbody.insertBefore(clone2, title2);
+      tbody.insertBefore(clone2, section2);
       
-      title2.style.top = null;
-      title2.classList.add("sticky-header");
-      firstChildOftitle2.style.width = offsetWidth + "px";
-      firstChildOftitle2.style.height = offsetHeight + "px";
+      section2.style.top = null;
+      section2.classList.add("sticky-header");
+      firstChildOfsection2.style.width = offsetWidth + "px";
+      firstChildOfsection2.style.height = offsetHeight + "px";
     }
   }
   
@@ -298,34 +298,34 @@ function stickLine() {
   if(offsetTop(clone2) > body.scrollTop) {
     tbody.removeChild(clone2);
     clone2 = null;
-    title2.classList.remove("sticky-header");
-    title2.classList.remove("sticky-transition");
+    section2.classList.remove("sticky-header");
+    section2.classList.remove("sticky-transition");
   }
-  if(offsetTop(title2) > body.scrollTop && title2.classList.contains("sticky-transition")) {
-    title2.style.top = null;
-    title2.classList.add("sticky-header");
-    title2.classList.remove("sticky-transition");
+  if(offsetTop(section2) > body.scrollTop && section2.classList.contains("sticky-transition")) {
+    section2.style.top = null;
+    section2.classList.add("sticky-header");
+    section2.classList.remove("sticky-transition");
   }
  }
   
-    // glue two titles together (2-3)
-  if(offsetTop(title3) <= body.scrollTop + title2.offsetHeight - 1) {
-    title2.classList.add("sticky-transition");
-    title2.style.top = (offsetTop(title3) - title2.offsetHeight + 1) + "px";
+    // glue two sections together (2-3)
+  if(offsetTop(section3) <= body.scrollTop + section2.offsetHeight - 1) {
+    section2.classList.add("sticky-transition");
+    section2.style.top = (offsetTop(section3) - section2.offsetHeight + 1) + "px";
   }
   
-  // stick title3
-  if (offsetTop(title3) <= body.scrollTop) {
+  // stick section3
+  if (offsetTop(section3) <= body.scrollTop) {
     if(clone3 === null) {
-      clone3 = title3.cloneNode(true);
+      clone3 = section3.cloneNode(true);
       clone3.className = "clone";
       clone3.firstElementChild.style.borderBottom = "none";
-      tbody.insertBefore(clone3, title3);
+      tbody.insertBefore(clone3, section3);
       
-      title3.style.top = null;
-      title3.classList.add("sticky-header");
-      firstChildOftitle3.style.width = offsetWidth + "px";
-      firstChildOftitle3.style.height = offsetHeight + "px";
+      section3.style.top = null;
+      section3.classList.add("sticky-header");
+      firstChildOfsection3.style.width = offsetWidth + "px";
+      firstChildOfsection3.style.height = offsetHeight + "px";
     }
   }
   
@@ -333,8 +333,8 @@ function stickLine() {
   if(offsetTop(clone3) > body.scrollTop) {
     tbody.removeChild(clone3);
     clone3 = null;
-    title3.classList.remove("sticky-header");
-    title3.classList.remove("sticky-transition");
+    section3.classList.remove("sticky-header");
+    section3.classList.remove("sticky-transition");
   }
  }
 }
