@@ -229,118 +229,113 @@ function handleHover(event) {
 
 /***********************Sticky Header************/
 document.addEventListener("scroll", stickLine);
-var clone = null;
+var clone1 = null;
 var clone2 = null;
 var clone3 = null;
+var clones = [null, null, null];
 var section1 = tbody.getElementsByClassName("section")[0];
 var section2 = tbody.getElementsByClassName("section")[1];
 var section3 = tbody.getElementsByClassName("section")[2];
+var sections = tbody.getElementsByClassName("section");
 var body = document.body;
 
 function stickLine() {
-  var firstChildOfsection1 = section1.firstElementChild;
-  var firstChildOfsection2 = section2.firstElementChild;
-  var firstChildOfsection3 = section3.firstElementChild;
-  var offsetWidth = firstChildOfsection1.offsetWidth;
-  var offsetHeight = firstChildOfsection1.offsetHeight;
-  var pointForAbsolute = offsetTop(section2);
-  
-  
+  //Когда верхний бордер становится вровень с верхней границей окна браузера делаем position = fixed
   if(offsetTop(section1) <= body.scrollTop) {
-    if(clone === null) {
-      // stick title
-      clone = section1.cloneNode(true);
-      clone.className = "clone";
-      clone.firstElementChild.style.borderBottom = "none";
-      tbody.insertBefore(clone, section1);
-      //Сбрасываем инлайновые стили
-      section1.style.top = null;
-      section1.classList.add("sticky-header");
-      firstChildOfsection1.style.width = offsetWidth + "px";
-      firstChildOfsection1.style.height = offsetHeight + "px";
+    //При скролле вниз смотрим, создавался ли клон, чтоб они не плодились при скролле
+    if(clone1 === null) {
+      clone1 = createClone(section1);
+      setFixedState(section1);
     }
   }
   
-  if(clone) {
-    if(offsetTop(clone) > body.scrollTop) {
-      // unstick title
-      tbody.removeChild(clone);
-      clone = null;
-      section1.classList.remove("sticky-header");
-      section1.classList.remove("sticky-transition");
+  //При скролле наверх удаляется клон
+  if(clone1) {
+    if(offsetTop(clone1) > body.scrollTop) {
+      returnToNormalPlace(clone1, section1);
+      clone1 = null;
     }
+    //position меняется на fixed, когда заголовки "разлепляются"
     if(offsetTop(section1) > body.scrollTop && section1.classList.contains("sticky-transition")) {
-      section1.style.top = null;
-      section1.classList.add("sticky-header");
-      section1.classList.remove("sticky-transition");
+      setStickyState(section1);
     }
   }
   
-  // glue two sections together
-  //+1/-1-это чтобы не удалять/добавлять нижние и верхние бордеры каждый раз
+  //+1/-1-это чтобы не удалять/добавлять нижние и верхние бордеры каждый раз при скролле туда-сюда (из-за отрисовки браузера при соединение заголовков бордеры кажутся двойными)
   if(offsetTop(section2) <= body.scrollTop + section1.offsetHeight - 1) {
-    section1.classList.add("sticky-transition");
-    section1.style.top = (pointForAbsolute - section1.offsetHeight + 1) + "px";
+    setTransitionState(section1, section2);
   }
   
-  // stick section2
-  if (pointForAbsolute <= body.scrollTop) {
+  
+  if (offsetTop(section2) <= body.scrollTop) {
     if(clone2 === null) {
-      clone2 = section2.cloneNode(true);
-      clone2.className = "clone";
-      clone2.firstElementChild.style.borderBottom = "none";
-      tbody.insertBefore(clone2, section2);
-      
-      section2.style.top = null;
-      section2.classList.add("sticky-header");
-      firstChildOfsection2.style.width = offsetWidth + "px";
-      firstChildOfsection2.style.height = offsetHeight + "px";
+      clone2 = createClone(section2);
+      setFixedState(section2);
     }
   }
   
- if (clone2) {
-  if(offsetTop(clone2) > body.scrollTop) {
-    tbody.removeChild(clone2);
-    clone2 = null;
-    section2.classList.remove("sticky-header");
-    section2.classList.remove("sticky-transition");
-  }
-  if(offsetTop(section2) > body.scrollTop && section2.classList.contains("sticky-transition")) {
-    section2.style.top = null;
-    section2.classList.add("sticky-header");
-    section2.classList.remove("sticky-transition");
-  }
+  if (clone2) {
+    if(offsetTop(clone2) > body.scrollTop) {
+      returnToNormalPlace(clone2, section2);
+      clone2 = null;
+    }
+    if(offsetTop(section2) > body.scrollTop && section2.classList.contains("sticky-transition")) {
+      setStickyState(section2);
+    }
  }
   
-    // glue two sections together (2-3)
   if(offsetTop(section3) <= body.scrollTop + section2.offsetHeight - 1) {
-    section2.classList.add("sticky-transition");
-    section2.style.top = (offsetTop(section3) - section2.offsetHeight + 1) + "px";
+    setTransitionState(section2, section3);
   }
   
-  // stick section3
   if (offsetTop(section3) <= body.scrollTop) {
     if(clone3 === null) {
-      clone3 = section3.cloneNode(true);
-      clone3.className = "clone";
-      clone3.firstElementChild.style.borderBottom = "none";
-      tbody.insertBefore(clone3, section3);
-      
-      section3.style.top = null;
-      section3.classList.add("sticky-header");
-      firstChildOfsection3.style.width = offsetWidth + "px";
-      firstChildOfsection3.style.height = offsetHeight + "px";
+      clone3 = createClone(section3);     
+      setFixedState(section3);
     }
   }
   
  if (clone3) {
   if(offsetTop(clone3) > body.scrollTop) {
-    tbody.removeChild(clone3);
+    returnToNormalPlace(clone3, section3);
     clone3 = null;
-    section3.classList.remove("sticky-header");
-    section3.classList.remove("sticky-transition");
+  }
+  if(offsetTop(section3) > body.scrollTop && section3.classList.contains("sticky-transition")) {
+    setStickyState(section3);
   }
  }
+}
+
+function createClone(section) {
+  var clone = section.cloneNode(true);
+  clone.className = "clone";
+  clone.firstElementChild.style.borderBottom = "none";
+  tbody.insertBefore(clone, section);
+  return clone;
+}
+
+function setFixedState(section) {
+  //удаляем инлайновые стили иначе класс в css не перезаписывает их
+  section.style.top = null;
+  section.classList.add("sticky-header");
+}
+
+//делает position=static и удаляет клона
+function returnToNormalPlace(clone, section) {
+  tbody.removeChild(clone);
+  section.classList.remove("sticky-header");
+  section.classList.remove("sticky-transition");
+}
+
+function setStickyState(section) {
+  section.style.top = null;
+  section.classList.add("sticky-header");
+  section.classList.remove("sticky-transition");
+}
+
+function setTransitionState(prevSection, section) {
+  prevSection.classList.add("sticky-transition");
+  prevSection.style.top = (offsetTop(section) - prevSection.offsetHeight + 1) + "px";
 }
 
 //Функция возавращает offsetTop от самого боди (с учетом изменения контекста позиционирования)
