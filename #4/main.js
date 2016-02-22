@@ -244,7 +244,7 @@
         //При скролле вниз смотрим, создавался ли клон, чтоб они не плодились при скролле
         if (clones[i] === null) {
           clones[i] = createClone(sections[i]);
-          setFixedState(sections[i]);
+          setStickyState(sections[i]);
         }
       }
 
@@ -277,12 +277,6 @@
     return clone;
   }
 
-  function setFixedState(section) {
-    //удаляем инлайновые стили иначе класс в css не перезаписывает их
-    section.style.top = null;
-    section.classList.add("sticky-header");
-  }
-
   //делает position=static и удаляет клона
   function returnToNormalPlace(clone, section) {
     tbody.removeChild(clone);
@@ -291,6 +285,7 @@
   }
 
   function setStickyState(section) {
+    //удаляем инлайновые стили иначе класс в css не перезаписывает их
     section.style.top = null;
     section.classList.add("sticky-header");
     section.classList.remove("sticky-transition");
