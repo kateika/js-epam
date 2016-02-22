@@ -28,8 +28,8 @@ function handleClick(event) {
     //Чтобы при прокрутке во время удаления-добавления линии таблица не прыгала
     event.preventDefault();
     //Вызываю функцию создания линии, передавая в аргументе "секцию",в которой произошел клик
-    if (target.classList.contains("add")) createLine(line);
-    else deleteLine(line);
+    if (target.classList.contains("add")) {createLine(line)};
+    else {deleteLine(line)};
   }
   
   if(target.tagName.toLocaleLowerCase() == "td") {
@@ -67,7 +67,7 @@ function handleClick(event) {
 function indexOf(target) {
   //Нахожу индекс, считая, сколько элементов было до него
   var index = 0, countTD = target;
-  while(countTD = countTD.previousElementSibling) index++;
+  while(countTD = countTD.previousElementSibling) {index++};
   return index;
 }
 
@@ -158,7 +158,7 @@ var hoveredTD, prevHoveredTD;
 
 function handleHover(event) {
   var target = event.target;
-  if(target.tagName.toLocaleLowerCase() != "td") return;
+  if(target.tagName.toLocaleLowerCase() != "td") {return};
   
   var line = target.closest("tr");
   var firstTD = line.firstElementChild;
@@ -306,7 +306,7 @@ function stickLine() {
     title2.style.top = (offsetTop(title3) - title2.offsetHeight + 1) + "px";
   }
   
-  // stick title2
+  // stick title3
   if (offsetTop(title3) <= body.scrollTop) {
     if(clone3 === null) {
       clone3 = title3.cloneNode(true);
