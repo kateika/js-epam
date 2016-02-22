@@ -28,8 +28,11 @@ function handleClick(event) {
     //Чтобы при прокрутке во время удаления-добавления линии таблица не прыгала
     event.preventDefault();
     //Вызываю функцию создания линии, передавая в аргументе "секцию",в которой произошел клик
-    if (target.classList.contains("add")) {createLine(line)};
-    else {deleteLine(line)};
+    if (target.classList.contains("add")) {
+      createLine(line);
+    } else if (target.classList.contains("delete")) {
+      deleteLine(line);
+    };
   }
   
   if(target.tagName.toLocaleLowerCase() == "td") {
@@ -67,7 +70,9 @@ function handleClick(event) {
 function indexOf(target) {
   //Нахожу индекс, считая, сколько элементов было до него
   var index = 0, countTD = target;
-  while(countTD = countTD.previousElementSibling) {index++};
+  while(countTD = countTD.previousElementSibling) {
+    index++;
+  };
   return index;
 }
 
@@ -102,7 +107,7 @@ function createLine(section) {
   count(section);
 }
 
-function deleteLine(line) { 
+function deleteLine(line) {
   var section = findCurrentSection(line);
   tbody.removeChild(line);
   count(section);
@@ -158,7 +163,9 @@ var hoveredTD, prevHoveredTD;
 
 function handleHover(event) {
   var target = event.target;
-  if(target.tagName.toLocaleLowerCase() != "td") {return};
+  if(target.tagName.toLocaleLowerCase() != "td") {
+    return;
+  };
   
   var line = target.closest("tr");
   var firstTD = line.firstElementChild;
@@ -179,9 +186,10 @@ function handleHover(event) {
     }
     
     //Здесь запомнено пред-предыдущее состояние (до оранжевого). Очищаем бэкграунд и состояния, так как при наведении на первую,последнюю и ячейку с заголовком в таблице не должно быть никаких цветов
-    if(prevHoveredTD)
+    if(prevHoveredTD) {
       prevHoveredTD.style.backgroundColor = "transparent";
-      prevHoveredTD = hoveredTD = null;
+      prevHoveredTD = hoveredTD = null;  
+    }
   }
   
   
